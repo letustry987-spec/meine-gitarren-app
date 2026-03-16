@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gitarren App</title>
+    <style>
+        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; margin: 0; padding: 20px; }
+        input { width: 80%; padding: 15px; border-radius: 10px; border: none; font-size: 16px; }
+        button { padding: 15px; background: #2563eb; color: white; border: none; border-radius: 10px; margin-top: 10px; cursor: pointer; font-weight: bold; }
+        .card { background: #2a2a2a; border-radius: 15px; padding: 20px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .chord-grid { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        .chord-box { background: white; color: black; padding: 10px; border-radius: 8px; min-width: 80px; }
+        .chord-name { font-size: 24px; font-weight: bold; display: block; margin-bottom: 5px; }
+        svg { background: white; border-radius: 4px; }
+        iframe { width: 100%; border-radius: 15px; margin-top: 20px; height: 200px; border: 1px solid #444; }
+    </style>
+</head>
+<body>
+
+    <h1>🎸 ChordStream</h1>
+    <input type="text" id="song" placeholder="Lied eingeben (z.B. Wonderwall)">
+    <button onclick="suche()">Song & Akkorde finden</button>
+
+    <div id="result" style="display:none;">
+        <div class="card">
+            <h2 id="songTitle">Lied</h2>
+            <!-- Statisches YouTube-Vorschaubild mit Link, falls Iframe blockiert wird -->
+            <div id="videoArea"></div>
+            
+            <p>Empfohlene Akkorde:</p>
+            <div class="chord-grid" id="chords"></div>
+            
+            <button onclick="window.open('https://chordify.net' + document.getElementById('song').value)" style="background:#10b981; width:100%">
+                Echte Akkorde (KI Analyse) öffnen ↗
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function suche() {
+            const query = document.getElementById('song').value;
+            if(!query) return;
+
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('songTitle').innerText = query;
+
+            // Video Einbindung (stabilere Methode)
+            const videoArea = document.getElementById('videoArea');
+            videoArea.innerHTML = `<iframe src="https://www.youtube.com{encodeURIComponent(query)}" allowfullscreen></iframe>`;
+
+            // Akkorde zeichnen (Beispiel G-Dur)
+            const chordsDiv = document.getElementById('chords');
+            chordsDiv.innerHTML = `
+                <div class="chord-box"><span class="chord-name">G</span>
+                    <svg width="60" height="70" viewBox="0 0 60 70">
+                        <line x1="10" y1="10" x2="50" y2="10" stroke="black" stroke-width="2"/>
+                        <line x1="10" y1="25" x2="50" y2="25" stroke="black"/>
+                        <line x1="10" y1="40" x2="50" y2="40" stroke="black"/>
+                        <line x1="10" y1="55" x2="50" y2="55" stroke="black"/>
+                        <line x1="10" y1="10" x2="10" y2="55" stroke="black"/>
+                        <line x1="23" y1="10" x2="23" y2="55" stroke="black"/>
+                        <line x1="36" y1="10" x2="36" y2="55" stroke="black"/>
+                        <line x1="50" y1="10" x2="50" y2="55" stroke="black"/>
+                        <circle cx="10" cy="47" r="4" fill="red"/>
+                        <circle cx="23" cy="18" r="4" fill="red"/>
+                        <circle cx="50" cy="47" r="4" fill="red"/>
+                    </svg>
+                </div>
+                <div class="chord-box"><span class="chord-name">D</span>
+                    <svg width="60" height="70" viewBox="0 0 60 70">
+                        <line x1="10" y1="10" x2="50" y2="10" stroke="black" stroke-width="2"/>
+                        <line x1="10" y1="25" x2="50" y2="25" stroke="black"/>
+                        <line x1="10" y1="40" x2="50" y2="40" stroke="black"/>
+                        <line x1="10" y1="55" x2="50" y2="55" stroke="black"/>
+                        <circle cx="36" cy="18" r="4" fill="red"/>
+                        <circle cx="50" cy="33" r="4" fill="red"/>
+                        <circle cx="36" cy="47" r="4" fill="red"/>
+                    </svg>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
